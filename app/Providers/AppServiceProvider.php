@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ImageCompression::class, function() {
             $tinify = new Tinify;
-            $tinify->setKey($this->app->config['services.tinify']);
+            $tinify->setKey($this->app->config['servces.tinify']);
 
             return new ImageCompression($tinify);
         });
@@ -36,8 +36,10 @@ class AppServiceProvider extends ServiceProvider
         UploadedFile::macro('compress', function() {
             resolve(ImageCompression::class);
 
-            $path = $this->path();
-            \Tinify\fromFile($path)->toFile($path);
+            try {
+                $path = $this->path();
+                \Tinify\fromFile($path)->toFile($path);
+            } catch (\Exception $e) {}
 
             return $this;
         });
