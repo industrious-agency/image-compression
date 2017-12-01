@@ -34,12 +34,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         UploadedFile::macro('compress', function() {
-            resolve(ImageCompression::class);
-
-            try {
-                $path = $this->path();
-                \Tinify\fromFile($path)->toFile($path);
-            } catch (\Exception $e) {}
+            $api = resolve(ImageCompression::class);
+            $api->compress($this->path());
 
             return $this;
         });
